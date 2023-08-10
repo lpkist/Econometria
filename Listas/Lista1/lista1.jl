@@ -22,14 +22,14 @@ print("A correlação é ", round(cor(dados[:, "math4"], dados[:, "read4"]), dig
 
 #e) A variável exppp são os gatos por aluno. Econtre o exppp médio e seu desvio padrão.
 print("A média é ", round(mean(dados[:, "exppp"]), digits = 2), " enquanto o desvio padrão é ",
- round(std(dados[:, "exppp"]), digits = 2, ".\n")
+ round(std(dados[:, "exppp"]), digits = 2), ".\n")
 
 #f) Suponha que a escola A gaste USD$6.000 por estudante e a escola B gaste
 #USD$5.500 por estudante. Com que percentual os gastos da escola A superam
 #os da escola B? Compare isso a 100 × [log(6.000) − log(5.500)], que é a diferença
 #percentual aproximada baseada na diferença dos logaritmos.
 print(round(100*(log(6)-log(5.5)), digits = 2), " é o percentual que os gastos superam.\n")
-
+print(round(100*(6000-5500)/5500, digits = 2), " é o percentual que os gastos superam.\n")
 
 ######### Questão 2
 dados2 = DataFrame(load("C:/Users/Lucas/Documents/econometria/lista1/econmath.dta"))
