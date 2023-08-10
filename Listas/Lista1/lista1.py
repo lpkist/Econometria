@@ -3,7 +3,7 @@ import pandas as pd
 import statistics as sts
 import math
 
-dados, meta = stat.read_dta('C:/Users/Lucas/Documents/econometria/lista 1/meap01.dta')
+dados, meta = stat.read_dta("C:/Users/Lucas/Documents/econometria/lista1/meap01.dta")
 
 #a) Encontre os maiores e menores valores de math4.
 print('Máximo: ', max(dados['math4']), "\n", "Mínimo: ", min(dados['math4']), sep = '')
@@ -29,10 +29,10 @@ print('A média é ', round(sts.mean(dados['exppp']), 2), "\n",
 #USD$5.500 por estudante. Com que percentual os gastos da escola A superam
 #os da escola B? Compare isso a 100 × [log(6.000) − log(5.500)], que é a diferença
 #percentual aproximada baseada na diferença dos logaritmos.
-print(round(100*(math.log(6) - math.log(5.5)), 2))
-
+print(round(100*(math.log(6000) - math.log(5500)), 2))
+print(round(100*(6000 - 5500)/5500, 2))
 ######### Questão 2
-dados2, meta = stat.read_dta("C:/Users/Lucas/Documents/econometria/lista 1/econmath.dta")
+dados2, meta = stat.read_dta("C:/Users/Lucas/Documents/econometria/lista1/econmath.dta")
 print(dados2.head)
 
 #a) Quantos estudantes estão na amostra? Quantos estudantes declaram ter frequen-
