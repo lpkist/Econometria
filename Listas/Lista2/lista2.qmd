@@ -1,0 +1,125 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+library(wooldridge)
+library(tidyverse)
+# O conjunto de dados BWGHT contêm informações de nascimentos 
+# nos Estados Unidos. As duas variáveis de interesse são bwght 
+# (peso do recém-nascido em onças) e cigs (número médio de cigarros
+# que a mãe fumou por dia durante a gravidez). Regrida bwght sobre 
+# cigs e responda às seguintes perguntas:
+modelo <- lm(bwght ~ cigs, bwght)
+summary(modelo)
+
+# a) Qual é o peso do nascimento previsto quando cigs = 0? 
+# E quando cigs = 20?
+predict(modelo, data.frame(cigs = c(0,20)))
+data.frame("cigs" = c(0,20), "pred" = predict(modelo, data.frame(cigs = c(0,20))))
+
+#   b) O MRLS necessariamente captura uma relação causal entre o 
+# peso do nascimento da criança e os hábitos de fumar da mãe?
+#### Não, porque podem existir outros fatores que influenciam o peso 
+#### do nascimento que não foram incluídos no modelo
+
+#   c) Para prever um peso de nascimento de 125 onças, qual deveria
+# ser a magnitude de cigs?
+(125 - modelo$coefficients[[1]])/modelo$coefficients[[2]]
+# De fato,
+predict(modelo, data.frame(cigs = c((125 - modelo$coefficients[[1]])/modelo$coefficients[[2]])))
+# Entretanto, não é factível fumar um número negativo de cigarros
+
+
+#   d) Verifique qual a proporção de mulheres que não fumaram durante 
+# a gravidez na amostra. Sua conclusão no item anterior muda?
+str_c(round((bwght %>% filter(cigs == 0) %>% nrow())/nrow(bwght)*100,2),"%")
+# Sim, porque o número de pessoas que não fumou é muito maior, influenciando 
+# fortemente no ajuste do modelo
+
+
+```
+
+```{python}
+# O conjunto de dados BWGHT contêm informações de nascimentos 
+# nos Estados Unidos. As duas variáveis de interesse são bwght 
+# (peso do recém-nascido em onças) e cigs (número médio de cigarros
+# que a mãe fumou por dia durante a gravidez). Regrida bwght sobre 
+# cigs e responda às seguintes perguntas:
+import wooldridge
+import statsmodels.api as sm
+import pandas as pd
+bwght = wooldridge.data("bwght")
+preditoras = sm.add_constant(bwght.cigs)
+modelo = sm.OLS(bwght.bwght, preditoras).fit()
+print(modelo.summary())
+
+
+# a) Qual é o peso do nascimento previsto quando cigs = 0? 
+# E quando cigs = 20?
+print("Se cigs = 0, a predição é de",modelo.predict(pd.DataFrame({"const":[1], "cigs":[0]}))[0])
+
+print("Já para cigs = 20, a predição é de", modelo.predict(pd.DataFrame({"const":[1], "cigs":[20]}))[0])
+
+
+#   b) O MRLS necessariamente captura uma relação causal entre o 
+# peso do nascimento da criança e os hábitos de fumar da mãe?
+#### Não, porque podem existir outros fatores que influenciam o peso 
+#### do nascimento que não foram incluídos no modelo
+
+#   c) Para prever um peso de nascimento de 125 onças, qual deveria
+# ser a magnitude de cigs?
+print((125 - modelo.params[0])/modelo.params[1])
+# De fato,
+print(modelo.predict([1,(125 - modelo.params[0])/modelo.params[1]]))
+# Entretanto, não é factível fumar um número negativo de cigarros
+
+
+#   d) Verifique qual a proporção de mulheres que não fumaram durante 
+# a gravidez na amostra. Sua conclusão no item anterior muda?
+print(100*round(bwght[bwght.cigs == 0].shape[0]/bwght.shape[0],4), "%")
+# Sim, porque o número de pessoas que não fumou é muito maior, influenciando 
+# fortemente no ajuste do modelo
+```
+
+```{julia}
+# O conjunto de dados BWGHT contêm informações de nascimentos 
+# nos Estados Unidos. As duas variáveis de interesse são bwght 
+# (peso do recém-nascido em onças) e cigs (número médio de cigarros
+# que a mãe fumou por dia durante a gravidez). Regrida bwght sobre 
+# cigs e responda às seguintes perguntas:
+using WooldridgeDatasets, DataFrames, GLM
+bwght = DataFrame(wooldridge("bwght"))
+modelo = lm(@formula(bwght ~ cigs), bwght)
+
+# a) Qual é o peso do nascimento previsto quando cigs = 0? 
+# E quando cigs = 20?
+print("Se cigs = 0, a predição é de ", round(predict(modelo, DataFrame(cigs = 0))[1], digits = 2))
+print("\nJá para cigs = 20, a predição é de ", round(predict(modelo, DataFrame(cigs = 20))[1], digits = 2))
+
+#   b) O MRLS necessariamente captura uma relação causal entre o 
+# peso do nascimento da criança e os hábitos de fumar da mãe?
+#### Não, porque podem existir outros fatores que influenciam o peso 
+#### do nascimento que não foram incluídos no modelo
+
+#   c) Para prever um peso de nascimento de 125 onças, qual deveria
+# ser a magnitude de cigs?
+print("\n",(125 - coef(modelo)[1])/coef(modelo)[2], "\n")
+# De fato,
+print(round(predict(modelo, DataFrame(cigs = (125 - coef(modelo)[1])/coef(modelo)[2]))[1], digits = 2))
+# Entretanto, não é factível fumar um número negativo de cigarros
+
+
+#   d) Verifique qual a proporção de mulheres que não fumaram durante 
+# a gravidez na amostra. Sua conclusão no item anterior muda?
+print("\n", 100*round(nrow(filter(row -> row.cigs == 0, bwght))/nrow(bwght), digits = 4), "%")
+# Sim, porque o número de pessoas que não fumou é muito maior, influenciando 
+# fortemente no ajuste do modelo
+
+
+
+
+
+```
